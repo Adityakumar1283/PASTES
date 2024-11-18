@@ -8,31 +8,39 @@ const Autocomplete = () => {
   const [todos, setTodos] = useState([]);
 
   const [todoToAdd, setTodoToAdd] = useState("");
-
-  window.todoid = 1000;
+  window.todoId = Math.random(100);
+  
 
   function handleTodos(value) {
     setTodoToAdd(value);
   }
   function handleAddTodo() {
     const oldTodos = structuredClone(todos);
-
+    
     const newTodo = {};
-    newTodo.id = window.todoId++;
+    newTodo.id = window.todoId+1;
     newTodo.todo = todoToAdd;
-    
+
     const newTodos = [newTodo, ...oldTodos];
-    setTodoToAdd("")
+    setTodoToAdd("");
     setTodos(newTodos);
+  }
+
+  function handelEdit(id) {
     
+  }
+
+  function handleDel(id) {
+    const newtodos = todos.filter((todo) => todo.id !== id);
+    setTodos(newtodos);
   }
 
   return (
     <div>
-      <Inputtexts onChange={handleTodos} />
+      <Inputtexts value={todoToAdd} onChange={handleTodos} />
 
       <Button onClick={handleAddTodo} label={"Add Todo"}></Button>
-      <Todos todos={todos} />
+      <Todos onEdit={handelEdit} onDel={handleDel} todos={todos} />
     </div>
   );
 };
