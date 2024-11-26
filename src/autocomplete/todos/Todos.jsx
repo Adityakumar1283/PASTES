@@ -9,7 +9,7 @@ const Todos = ({ todos = [], onEdit, onDel, onEditcancle, onEditsave }) => {
         return (
           <h2>
             <Todoitem
-              key={todos.id}
+              
               index = {index}
               todos={todos}
               onEdit={onEdit}
@@ -47,8 +47,7 @@ const Todoitem = ({ todos, onDel,index ,onEdit, onEditcancle, onEditsave }) => {
   function handlesave(id) {
     return () => {
       const value = inputref.current.value;
-      console.log(value)
-      console.log(id)
+      
       onEditsave(index, value);
       inputref.current.value ="";
     };

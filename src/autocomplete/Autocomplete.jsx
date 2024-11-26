@@ -3,14 +3,27 @@ import Button from "./button";
 import Inputtexts from "./inputfield/Inputtexts";
 import "./style.css";
 import Todos from "./todos";
-//import {structuredClone} from "react"
+
+
 const Autocomplete = () => {
-  const [todos, setTodos] = useState([]);
+  window.todoId = 100
+  const TODO_KEY = "my_todos";
+  const [todos, setTodos] = useState(loadfromcache);
 
   const [todoToAdd, setTodoToAdd] = useState("");
-  window.todoId = Math.random(100);
-  function preserveTodos(key){
-      const strTodo = JSON.stringify()
+
+  function loadfromcache() {
+    const todoString = localStorage.getItem(TODO_KEY);
+    const todoArr = JSON.parse(todoString);
+    window.todoId = window.todoId + todoArr;
+
+    return todoArr;
+  }
+
+  function preserveTodos(data) {
+    const strTodo = JSON.stringify(data);
+    setTodos(data);
+    localStorage.setItem(TODO_KEY, strTodo);
   }
   function handleTodos(value) {
     setTodoToAdd(value);
@@ -24,9 +37,11 @@ const Autocomplete = () => {
       isEditing: false,
     };
 
-    const newTodos = [newTodo, ...oldTodos];
+    const newtodos = [newTodo, ...oldTodos];
+
     setTodoToAdd("");
-    setTodos(newTodos);
+
+    preserveTodos(newtodos);
   }
 
   function handelEdit(id) {
@@ -38,12 +53,14 @@ const Autocomplete = () => {
       }
       return { ...todo };
     });
-    setTodos(newtodos);
+
+    preserveTodos(newtodos);
   }
 
   function handleDel(id) {
     const newtodos = todos.filter((todo) => todo.id !== id);
-    setTodos(newtodos);
+
+    preserveTodos(newtodos);
   }
 
   function hanleEditcancle(id) {
@@ -54,7 +71,8 @@ const Autocomplete = () => {
 
       return { ...todo };
     });
-    setTodos(newtodos);
+    
+    preserveTodos(newtodos);
   }
 
   function handelEditSave(index, value) {
@@ -62,7 +80,8 @@ const Autocomplete = () => {
     newtodos[index].todo = value;
     newtodos[index].isEditing = false;
 
-    setTodos(newtodos);
+    
+    preserveTodos(newtodos);
   }
   return (
     <div>
