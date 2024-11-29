@@ -6,7 +6,7 @@ import Todos from "./todos";
 
 
 const Autocomplete = () => {
-  window.todoId = 100
+   window.todoId = Math.random(100);
   const TODO_KEY = "my_todos";
   const [todos, setTodos] = useState(loadfromcache);
 
@@ -15,7 +15,7 @@ const Autocomplete = () => {
   function loadfromcache() {
     const todoString = localStorage.getItem(TODO_KEY);
     const todoArr = JSON.parse(todoString);
-    window.todoId = window.todoId + todoArr;
+    window.todoId = window.todoId+todoArr;
 
     return todoArr;
   }
@@ -35,6 +35,7 @@ const Autocomplete = () => {
       id: window.todoId + 1,
       todo: todoToAdd,
       isEditing: false,
+      isCompeleted: false,
     };
 
     const newtodos = [newTodo, ...oldTodos];
@@ -83,6 +84,20 @@ const Autocomplete = () => {
     
     preserveTodos(newtodos);
   }
+
+  function handleDone(id){
+    const newtodos = todos.map((todo) => {
+      if (todo.id == id) {
+        todo.isCompeleted = true;
+        
+      }
+
+      return { ...todo };
+    });
+    
+    preserveTodos(newtodos);
+
+  }
   return (
     <div>
       <Inputtexts value={todoToAdd} onChange={handleTodos} />
@@ -94,6 +109,7 @@ const Autocomplete = () => {
         onEditsave={handelEditSave}
         onDel={handleDel}
         todos={todos}
+        onDone ={ handleDone}
       />
     </div>
   );

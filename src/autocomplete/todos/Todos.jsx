@@ -1,21 +1,28 @@
 import { useRef } from "react";
 import Button from "../button";
 import "./style.css";
-const Todos = ({ todos = [], onEdit, onDel, onEditcancle, onEditsave }) => {
+const Todos = ({
+  todos = [],
+  onEdit,
+  onDel,
+  onEditcancle,
+  onEditsave,
+  onDone,
+}) => {
   return (
     <div>
       <h1>Your Todos</h1>
-      {todos.map((todos,index) => {
+      {todos.map((todos, index) => {
         return (
           <h2>
             <Todoitem
-              
-              index = {index}
+              index={index}
               todos={todos}
               onEdit={onEdit}
               onDel={onDel}
               onEditcancle={onEditcancle}
               onEditsave={onEditsave}
+              onDone={onDone}
             />
           </h2>
         );
@@ -26,12 +33,25 @@ const Todos = ({ todos = [], onEdit, onDel, onEditcancle, onEditsave }) => {
 
 export default Todos;
 
-const Todoitem = ({ todos, onDel,index ,onEdit, onEditcancle, onEditsave }) => {
+const Todoitem = ({
+  todos,
+  onDel,
+  index,
+  onEdit,
+  onEditcancle,
+  onEditsave,
+  onDone,
+}) => {
   const inputref = useRef("");
 
   function handleDel() {
     return () => {
       onDel(todos.id);
+    };
+  }
+  function handleDone() {
+    return () => {
+      onDone(todos.id);
     };
   }
   function handelEdit() {
@@ -47,9 +67,9 @@ const Todoitem = ({ todos, onDel,index ,onEdit, onEditcancle, onEditsave }) => {
   function handlesave(id) {
     return () => {
       const value = inputref.current.value;
-      
+
       onEditsave(index, value);
-      inputref.current.value ="";
+      inputref.current.value = "";
     };
   }
   if (todos.isEditing) {
@@ -63,10 +83,11 @@ const Todoitem = ({ todos, onDel,index ,onEdit, onEditcancle, onEditsave }) => {
   }
 
   return (
-    <div>
+    <div data-completed-todo = {todos.isCompleted}>
       <span> {todos.todo}</span>
       <Button onClick={handleDel(todos.id)} label={"DEL"} />
       <Button onClick={handelEdit(todos.id)} label={"Edit"} />
+      <Button onClick={handleDone(todos.id)} label={"Done"} />
     </div>
   );
 };
