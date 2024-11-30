@@ -10,7 +10,7 @@ const Todos = ({
   onDone,
 }) => {
   return (
-    <div>
+    <div >
       <h1>Your Todos</h1>
       {todos.map((todos, index) => {
         return (
@@ -83,11 +83,13 @@ const Todoitem = ({
   }
 
   return (
-    <div data-completed-todo = {todos.isCompleted}>
+    <div className="todolist">
+    <div data-todo = {todos.isCompeleted}>
       <span> {todos.todo}</span>
       <Button onClick={handleDel(todos.id)} label={"DEL"} />
       <Button onClick={handelEdit(todos.id)} label={"Edit"} />
       <Button onClick={handleDone(todos.id)} label={"Done"} />
+    </div>
     </div>
   );
 };

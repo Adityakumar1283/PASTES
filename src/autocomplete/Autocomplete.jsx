@@ -87,11 +87,11 @@ const Autocomplete = () => {
 
   function handleDone(id){
     const newtodos = todos.map((todo) => {
-      if (todo.id == id) {
+      if (todo.id === id) {
         todo.isCompeleted = true;
         
       }
-
+       
       return { ...todo };
     });
     
