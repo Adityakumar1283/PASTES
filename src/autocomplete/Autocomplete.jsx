@@ -8,10 +8,17 @@ import Todos from "./todos";
 const Autocomplete = () => {
    window.todoId = Math.random(100);
   const TODO_KEY = "my_todos";
+  let showTodo = [];
+  let donetodo =[];
+  let pendingtodo = [];
+  const FilterType ={
+    PENDING: 0,
+    DONE: 1,
+    NOTHING:3,
+  }
   const [todos, setTodos] = useState(loadfromcache);
-
   const [todoToAdd, setTodoToAdd] = useState("");
-
+  const [activeFilter,setactiveFilter] = useState(FilterType.NOTHING);
   function loadfromcache() {
     const todoString = localStorage.getItem(TODO_KEY);
     const todoArr = JSON.parse(todoString);
@@ -19,7 +26,17 @@ const Autocomplete = () => {
 
     return todoArr;
   }
-
+   function handlefilter(){
+    if(activeFilter === FilterType.NOTHING){
+      setactiveFilter(FilterType.DONE);
+    }
+    else if (activeFilter === FilterType.DONE){
+      setactiveFilter(FilterType.PENDING)
+    }
+    else if (activeFilter === FilterType.PENDING){
+      setactiveFilter(FilterType.DONE)
+    }
+   }
   function preserveTodos(data) {
     const strTodo = JSON.stringify(data);
     setTodos(data);
@@ -98,17 +115,39 @@ const Autocomplete = () => {
     preserveTodos(newtodos);
 
   }
+   
+  todos.forEach(t =>{
+    if(t.isCompeleted){
+      donetodo.push(t);
+    }
+    else{
+      pendingtodo.push(t);
+    } 
+  });
+  
+
+  if(activeFilter === FilterType.NOTHING){
+    showTodo = [...pendingtodo,...donetodo]
+  }
+  else if (activeFilter === FilterType.DONE){
+    showTodo = [...pendingtodo]
+  }
+  else if (activeFilter === FilterType.PENDING){
+    showTodo = [...donetodo]
+  }
+
   return (
     <div>
       <Inputtexts value={todoToAdd} onChange={handleTodos} />
 
       <Button onClick={handleAddTodo} label={"Add Todo"}></Button>
+      <Button onClick={handlefilter} label={"Done-Todo"}></Button>
       <Todos
         onEditcancle={hanleEditcancle}
         onEdit={handelEdit}
         onEditsave={handelEditSave}
         onDel={handleDel}
-        todos={todos}
+        todos={showTodo}
         onDone ={ handleDone}
       />
     </div>
